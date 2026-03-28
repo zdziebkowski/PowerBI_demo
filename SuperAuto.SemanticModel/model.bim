@@ -368,6 +368,153 @@
             "description": "Number of transactions",
             "expression": "COUNTROWS(fact_sales)",
             "formatString": "#,##0"
+          },
+          {
+            "name": "Selected Metric",
+            "description": "Metric switched by Field Parameter slicer",
+            "expression": [
+              "SWITCH(",
+              "    SELECTEDVALUE('Metric Parameter'[Metric Parameter Order]),",
+              "    0, [Net Revenue],",
+              "    1, [Total Profit],",
+              "    2, [Margin %],",
+              "    3, [Units Sold]",
+              ")"
+            ]
+          },
+          {
+            "name": "Selected Metric Formatted",
+            "description": "Formatted value of selected metric",
+            "expression": [
+              "VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order])",
+              "RETURN",
+              "    SWITCH(",
+              "        _sel,",
+              "        0, FORMAT([Net Revenue], \"€ #,##0\"),",
+              "        1, FORMAT([Total Profit], \"€ #,##0\"),",
+              "        2, FORMAT([Margin %], \"0.0%\"),",
+              "        3, FORMAT([Units Sold], \"#,##0\")",
+              "    )"
+            ]
+          },
+          {
+            "name": "Adjusted Discount %",
+            "description": "Adjusted discount after what-if parameter",
+            "expression": "[Avg Discount %] + [Discount Change Value]",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Simulated Profit",
+            "description": "Profit after discount change simulation",
+            "expression": [
+              "VAR DiscountShift = [Discount Change Value]",
+              "VAR OriginalGross = [Gross Revenue]",
+              "VAR NewDiscount = [Avg Discount %] + DiscountShift",
+              "VAR NewNetRevenue = OriginalGross * (1 - NewDiscount)",
+              "VAR Cost = [Total Cost]",
+              "RETURN",
+              "    NewNetRevenue - Cost"
+            ],
+            "formatString": "€ #,##0"
+          },
+          {
+            "name": "Profit Impact",
+            "description": "Difference between simulated and actual profit",
+            "expression": "[Simulated Profit] - [Total Profit]",
+            "formatString": "€ #,##0"
+          },
+          {
+            "name": "Dynamic Title Overview",
+            "description": "Dynamic page title for Executive Overview",
+            "expression": [
+              "VAR _region = IF(",
+              "    ISFILTERED(dim_dealer[region]),",
+              "    SELECTEDVALUE(dim_dealer[region], \"Multiple Regions\"),",
+              "    \"All Regions\"",
+              ")",
+              "VAR _year = IF(",
+              "    ISFILTERED(dim_date[year]),",
+              "    FORMAT(SELECTEDVALUE(dim_date[year]), \"0\"),",
+              "    \"2024-2025\"",
+              ")",
+              "RETURN",
+              "    \"Sales Performance \u2014 \" & _region & \", \" & _year"
+            ]
+          },
+          {
+            "name": "Dynamic Title Product",
+            "description": "Dynamic page title for Product & Dealer Analysis",
+            "expression": [
+              "VAR _model = IF(",
+              "    ISFILTERED(dim_model[model_name]),",
+              "    SELECTEDVALUE(dim_model[model_name], \"Multiple Models\"),",
+              "    \"All Models\"",
+              ")",
+              "VAR _year = IF(",
+              "    ISFILTERED(dim_date[year]),",
+              "    FORMAT(SELECTEDVALUE(dim_date[year]), \"0\"),",
+              "    \"2024-2025\"",
+              ")",
+              "RETURN",
+              "    \"Product & Dealer Analysis \u2014 \" & _model & \", \" & _year"
+            ]
+          },
+          {
+            "name": "Dealer Revenue Rank",
+            "description": "Dealer ranking by revenue",
+            "expression": [
+              "IF(",
+              "    HASONEVALUE(dim_dealer[dealer_name]),",
+              "    RANKX(",
+              "        ALL(dim_dealer[dealer_name]),",
+              "        [Net Revenue],",
+              "        ,",
+              "        DESC,",
+              "        Dense",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Dealer Margin Rank",
+            "description": "Dealer ranking by margin",
+            "expression": [
+              "IF(",
+              "    HASONEVALUE(dim_dealer[dealer_name]),",
+              "    RANKX(",
+              "        ALL(dim_dealer[dealer_name]),",
+              "        [Margin %],",
+              "        ,",
+              "        DESC,",
+              "        Dense",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "PY Revenue",
+            "description": "Revenue in previous year",
+            "expression": "CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))",
+            "formatString": "€ #,##0"
+          },
+          {
+            "name": "PY Profit",
+            "description": "Profit in previous year",
+            "expression": "CALCULATE([Total Profit], SAMEPERIODLASTYEAR(dim_date[date]))",
+            "formatString": "€ #,##0"
+          },
+          {
+            "name": "Profit YoY %",
+            "description": "Year-over-year profit growth",
+            "expression": [
+              "VAR Current = [Total Profit]",
+              "VAR Previous = [PY Profit]",
+              "RETURN",
+              "    DIVIDE(Current - Previous, Previous, BLANK())"
+            ],
+            "formatString": "0.0%"
           }
         ],
         "partitions": [
@@ -384,6 +531,80 @@
                 "in",
                 "    ChangedTypes"
               ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Metric Parameter",
+        "description": "Field Parameter for switching between key metrics",
+        "columns": [
+          {
+            "name": "Metric Parameter",
+            "dataType": "string",
+            "isDefaultLabel": true,
+            "sourceColumn": "Metric Parameter",
+            "sortByColumn": "Metric Parameter Order",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Metric Parameter Order",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Metric Parameter Order",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Metric Parameter",
+            "dataView": "full",
+            "source": {
+              "type": "calculated",
+              "expression": [
+                "DATATABLE(",
+                "    \"Metric Parameter\", STRING,",
+                "    \"Metric Parameter Order\", INTEGER,",
+                "    {",
+                "        {\"Net Revenue\", 0},",
+                "        {\"Profit\", 1},",
+                "        {\"Margin %\", 2},",
+                "        {\"Units Sold\", 3}",
+                "    }",
+                ")"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Discount Change",
+        "description": "What-If parameter for discount change simulation (-10% to +10%)",
+        "columns": [
+          {
+            "name": "Discount Change",
+            "dataType": "double",
+            "isDefaultLabel": true,
+            "formatString": "0.0%",
+            "sourceColumn": "[Value]",
+            "summarizeBy": "none"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Discount Change Value",
+            "description": "Selected discount change from what-if slicer",
+            "expression": "SELECTEDVALUE('Discount Change'[Discount Change], 0)",
+            "formatString": "0.0%"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Discount Change",
+            "dataView": "full",
+            "source": {
+              "type": "calculated",
+              "expression": "GENERATESERIES(-0.10, 0.10, 0.01)"
             }
           }
         ]

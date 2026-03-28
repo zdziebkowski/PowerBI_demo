@@ -1,0 +1,17 @@
+/// What-If parameter: simulate discount change (-10pp to +10pp)
+table 'Discount Change'
+
+	column 'Discount Change'
+		dataType: double
+		isDefaultLabel
+		formatString: 0.0%
+		sourceColumn: [Value]
+		summarizeBy: none
+
+	/// Selected discount change value from what-if slicer
+	measure 'Discount Change Value' = SELECTEDVALUE('Discount Change'[Discount Change], 0)
+		formatString: 0.0%
+
+	partition 'Discount Change' = calculated
+		mode: import
+		source = GENERATESERIES(-0.10, 0.10, 0.01)

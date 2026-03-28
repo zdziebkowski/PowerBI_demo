@@ -146,6 +146,131 @@ table fact_sales
 	measure 'Transaction Count' = COUNTROWS(fact_sales)
 		formatString: #,##0
 
+	/// --- FIELD PARAMETER: Metric Selector ---
+
+	/// Metric switched by Field Parameter slicer
+	measure 'Selected Metric' =
+		SWITCH(
+			SELECTEDVALUE('Metric Parameter'[Metric Parameter Order]),
+			0, [Net Revenue],
+			1, [Total Profit],
+			2, [Margin %],
+			3, [Units Sold]
+		)
+
+	/// Formatted value of selected metric
+	measure 'Selected Metric Formatted' =
+		VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order])
+		RETURN
+			SWITCH(
+				_sel,
+				0, FORMAT([Net Revenue], "€ #,##0"),
+				1, FORMAT([Total Profit], "€ #,##0"),
+				2, FORMAT([Margin %], "0.0%"),
+				3, FORMAT([Units Sold], "#,##0")
+			)
+
+	/// --- WHAT-IF: Discount Impact ---
+
+	/// Adjusted discount after what-if parameter
+	measure 'Adjusted Discount %' = [Avg Discount %] + [Discount Change Value]
+		formatString: 0.0%
+
+	/// Profit after discount change simulation
+	measure 'Simulated Profit' =
+		VAR DiscountShift = [Discount Change Value]
+		VAR OriginalGross = [Gross Revenue]
+		VAR NewDiscount = [Avg Discount %] + DiscountShift
+		VAR NewNetRevenue = OriginalGross * (1 - NewDiscount)
+		VAR Cost = [Total Cost]
+		RETURN
+			NewNetRevenue - Cost
+		formatString: € #,##0
+
+	/// Difference between simulated and actual profit
+	measure 'Profit Impact' = [Simulated Profit] - [Total Profit]
+		formatString: € #,##0
+
+	/// --- DYNAMIC TITLES ---
+
+	/// Dynamic page title for Executive Overview
+	measure 'Dynamic Title Overview' =
+		VAR _region = IF(
+			ISFILTERED(dim_dealer[region]),
+			SELECTEDVALUE(dim_dealer[region], "Multiple Regions"),
+			"All Regions"
+		)
+		VAR _year = IF(
+			ISFILTERED(dim_date[year]),
+			FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
+			"2024-2025"
+		)
+		RETURN
+			"Sales Performance — " & _region & ", " & _year
+
+	/// Dynamic page title for Product & Dealer Analysis
+	measure 'Dynamic Title Product' =
+		VAR _model = IF(
+			ISFILTERED(dim_model[model_name]),
+			SELECTEDVALUE(dim_model[model_name], "Multiple Models"),
+			"All Models"
+		)
+		VAR _year = IF(
+			ISFILTERED(dim_date[year]),
+			FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
+			"2024-2025"
+		)
+		RETURN
+			"Product & Dealer Analysis — " & _model & ", " & _year
+
+	/// --- RANKING ---
+
+	/// Dealer ranking by revenue
+	measure 'Dealer Revenue Rank' =
+		IF(
+			HASONEVALUE(dim_dealer[dealer_name]),
+			RANKX(
+				ALL(dim_dealer[dealer_name]),
+				[Net Revenue],
+				,
+				DESC,
+				Dense
+			)
+		)
+		formatString: #,##0
+
+	/// Dealer ranking by margin
+	measure 'Dealer Margin Rank' =
+		IF(
+			HASONEVALUE(dim_dealer[dealer_name]),
+			RANKX(
+				ALL(dim_dealer[dealer_name]),
+				[Margin %],
+				,
+				DESC,
+				Dense
+			)
+		)
+		formatString: #,##0
+
+	/// --- YoY HELPERS ---
+
+	/// Revenue in previous year
+	measure 'PY Revenue' = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
+		formatString: € #,##0
+
+	/// Profit in previous year
+	measure 'PY Profit' = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(dim_date[date]))
+		formatString: € #,##0
+
+	/// Year-over-year profit growth
+	measure 'Profit YoY %' =
+		VAR Current = [Total Profit]
+		VAR Previous = [PY Profit]
+		RETURN
+			DIVIDE(Current - Previous, Previous, BLANK())
+		formatString: 0.0%
+
 	partition fact_sales = m
 		mode: import
 		source =

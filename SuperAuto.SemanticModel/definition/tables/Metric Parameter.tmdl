@@ -1,0 +1,29 @@
+/// Field Parameter for switching between key metrics
+table 'Metric Parameter'
+
+	column 'Metric Parameter'
+		dataType: string
+		isDefaultLabel
+		sourceColumn: Metric Parameter
+		sortByColumn: 'Metric Parameter Order'
+		summarizeBy: none
+
+	column 'Metric Parameter Order'
+		dataType: int64
+		isHidden
+		sourceColumn: Metric Parameter Order
+		summarizeBy: none
+
+	partition 'Metric Parameter' = calculated
+		mode: import
+		source =
+			DATATABLE(
+			    "Metric Parameter", STRING,
+			    "Metric Parameter Order", INTEGER,
+			    {
+			        {"Net Revenue", 0},
+			        {"Profit", 1},
+			        {"Margin %", 2},
+			        {"Units Sold", 3}
+			    }
+			)
