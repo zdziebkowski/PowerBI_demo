@@ -151,16 +151,17 @@ table fact_sales
 	/// Metric switched by Field Parameter slicer
 	measure 'Selected Metric' =
 		SWITCH(
-			SELECTEDVALUE('Metric Parameter'[Metric Parameter Order]),
+			SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0),
 			0, [Net Revenue],
 			1, [Total Profit],
 			2, [Margin %],
 			3, [Units Sold]
 		)
+		formatString: #,##0
 
 	/// Formatted value of selected metric
 	measure 'Selected Metric Formatted' =
-		VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order])
+		VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0)
 		RETURN
 			SWITCH(
 				_sel,

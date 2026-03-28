@@ -5,7 +5,7 @@ table 'Discount Change'
 		dataType: double
 		isDefaultLabel
 		formatString: 0.0%
-		sourceColumn: [Value]
+		sourceColumn: Value
 		summarizeBy: none
 
 	/// Selected discount change value from what-if slicer

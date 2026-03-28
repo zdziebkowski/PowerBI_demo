@@ -103,6 +103,7 @@
           {
             "name": "country",
             "dataType": "string",
+            "dataCategory": "Country",
             "sourceColumn": "country",
             "summarizeBy": "none"
           },
@@ -372,9 +373,10 @@
           {
             "name": "Selected Metric",
             "description": "Metric switched by Field Parameter slicer",
+            "formatString": "#,##0",
             "expression": [
               "SWITCH(",
-              "    SELECTEDVALUE('Metric Parameter'[Metric Parameter Order]),",
+              "    SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0),",
               "    0, [Net Revenue],",
               "    1, [Total Profit],",
               "    2, [Margin %],",
@@ -386,7 +388,7 @@
             "name": "Selected Metric Formatted",
             "description": "Formatted value of selected metric",
             "expression": [
-              "VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order])",
+              "VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0)",
               "RETURN",
               "    SWITCH(",
               "        _sel,",
@@ -586,7 +588,7 @@
             "dataType": "double",
             "isDefaultLabel": true,
             "formatString": "0.0%",
-            "sourceColumn": "[Value]",
+            "sourceColumn": "Value",
             "summarizeBy": "none"
           }
         ],

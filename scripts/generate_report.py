@@ -26,6 +26,11 @@ def uid() -> str:
     return str(uuid.uuid4())
 
 
+def section_name() -> str:
+    """Generate a Power BI section name in ReportSection + 8 hex chars format."""
+    return "ReportSection" + uuid.uuid4().hex[:8]
+
+
 def from_e(table: str) -> dict:
     return {"Name": ALIAS[table], "Entity": table, "Type": 0}
 
@@ -78,7 +83,7 @@ def _vc(
             {
                 "id": 0,
                 "position": {
-                    "x": 0, "y": 0, "z": z,
+                    "x": x, "y": y, "z": z,
                     "width": w, "height": h,
                     "tabOrder": z,
                 },
@@ -93,7 +98,7 @@ def _vc(
         },
     }
     return {
-        "id": uid(), "x": x, "y": y, "z": z, "width": w, "height": h,
+        "x": x, "y": y, "z": z, "width": w, "height": h,
         "config": json.dumps(inner, separators=(",", ":")),
         "filters": "[]",
     }
@@ -102,11 +107,11 @@ def _vc(
 # ─── Visual builder helpers ──────────────────────────────────────────────────
 
 def slicer(x, y, w, h, table, col, z=1000, mode=None):
-    """Dropdown slicer by default; pass mode='Basic' for buttons/chiclet."""
+    """List slicer. mode='Between' adds a numeric range style object."""
     proj = {"Values": [{"queryRef": f"{table}.{col}"}]}
     objs = {}
-    if mode:
-        objs = {"data": [{"properties": {"mode": {"expr": {"Literal": {"Value": f"'{mode}'"}}}}}]}
+    if mode == "Between":
+        objs = {"general": [{"properties": {"filter": {"expr": {"Literal": {"Value": "'Between'"}}}}}]}
     return _vc(x, y, w, h, "slicer", proj, [table], [c_sel(table, col)], objects=objs, z=z)
 
 
@@ -235,7 +240,7 @@ def decomp_tree(x, y, w, h, analyze_table, analyze_measure, explain_specs, z=300
 def textbox(x, y, w, h, text, z=500):
     inner = {
         "name": uid(),
-        "layouts": [{"id": 0, "position": {"x": 0, "y": 0, "z": z, "width": w, "height": h, "tabOrder": z}}],
+        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z}}],
         "singleVisual": {
             "visualType": "textbox",
             "objects": {
@@ -244,14 +249,14 @@ def textbox(x, y, w, h, text, z=500):
             "vcObjects": {},
         },
     }
-    return {"id": uid(), "x": x, "y": y, "z": z, "width": w, "height": h,
+    return {"x": x, "y": y, "z": z, "width": w, "height": h,
             "config": json.dumps(inner, separators=(",", ":")), "filters": "[]"}
 
 
 def action_button(x, y, w, h, label, z=500):
     inner = {
         "name": uid(),
-        "layouts": [{"id": 0, "position": {"x": 0, "y": 0, "z": z, "width": w, "height": h, "tabOrder": z}}],
+        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h, "tabOrder": z}}],
         "singleVisual": {
             "visualType": "actionButton",
             "objects": {
@@ -261,14 +266,14 @@ def action_button(x, y, w, h, label, z=500):
             "vcObjects": {},
         },
     }
-    return {"id": uid(), "x": x, "y": y, "z": z, "width": w, "height": h,
+    return {"x": x, "y": y, "z": z, "width": w, "height": h,
             "config": json.dumps(inner, separators=(",", ":")), "filters": "[]"}
 
 
 def section(name, ordinal, visuals, width=1280, height=720, hidden=False):
     display_option = 2 if hidden else 0
     return {
-        "id": uid(),
+        "name": section_name(),
         "displayName": name,
         "displayOption": display_option,
         "height": height,
@@ -405,37 +410,14 @@ p3.append(clustered_col(650, 8, 620, 284,
     [("fact_sales", "Total Profit"), ("fact_sales", "Simulated Profit")],
 ))
 
-# ── Section B: Bookmarked Storytelling ──────────────────────────────────────
-p3.append(textbox(10, 187, 620, 22, "Bookmarked Storytelling"))
+# ── Section B: Revenue by Region ────────────────────────────────────────────
+p3.append(textbox(10, 187, 620, 22, "Revenue by Region over Time"))
 
-# Story navigation buttons
-p3.append(action_button(10,  215, 190, 40, "1. Global Overview"))
-p3.append(action_button(210, 215, 190, 40, "2. Europe Problem"))
-p3.append(action_button(410, 215, 190, 40, "3. EV Opportunity"))
-
-# Story Chart 1: Revenue by region over time (BM_Story1 — visible by default)
-p3.append(line_chart(10, 265, 780, 435,
+# Line chart: Net Revenue by region and month
+p3.append(line_chart(10, 217, 620, 483,
                      "dim_date", "year_month",
                      "fact_sales", "Net Revenue",
                      leg_table="dim_dealer", leg_col="region"))
-
-# Story Chart 2: Margin % by country (BM_Story2 — same position, toggled by bookmark)
-p3.append(bar_chart(10, 265, 780, 435,
-                    "dim_dealer", "country",
-                    "fact_sales", "Margin %"))
-
-# Story Chart 3: EV trend — Units Sold + Margin % dual axis (BM_Story3)
-p3.append(line_chart(10, 265, 780, 435,
-                     "dim_date", "year_month",
-                     "fact_sales", "Units Sold",
-                     y2_table="fact_sales", y2_measure="Margin %"))
-
-# Narrative text box
-p3.append(textbox(800, 265, 470, 435,
-                  "Story navigation:\n\n"
-                  "1. Global Overview — full revenue breakdown by region.\n\n"
-                  "2. Europe Problem — European margin under pressure from discounts.\n\n"
-                  "3. EV Opportunity — Electra growing fast; costs remain the challenge."))
 
 page3 = section("Interactive Demo", 2, p3)
 
