@@ -1,0 +1,8 @@
+model_id,model_name,segment,fuel_type,vehicle_class
+M01,SuperAuto City,Compact,Petrol,Economy
+M02,SuperAuto Urban,Hatchback,Petrol,Economy
+M03,SuperAuto Family,Sedan,Hybrid,Mid-Range
+M04,SuperAuto Tourer,SUV,Diesel,Mid-Range
+M05,SuperAuto Cargo,Van,Diesel,Commercial
+M06,SuperAuto Electra,EV,Electric,Premium
+M07,SuperAuto Falcon,Premium SUV,Hybrid,Premium

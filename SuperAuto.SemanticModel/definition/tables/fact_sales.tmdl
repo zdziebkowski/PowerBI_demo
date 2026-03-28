@@ -1,0 +1,157 @@
+/// Sales fact table — wholesale transactions from SuperAuto to dealers
+table fact_sales
+
+	column sales_id
+		dataType: string
+		isKey
+		sourceColumn: sales_id
+		summarizeBy: none
+
+	column date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		sourceColumn: date
+		summarizeBy: none
+
+	column dealer_id
+		dataType: string
+		sourceColumn: dealer_id
+		summarizeBy: none
+
+	column model_id
+		dataType: string
+		sourceColumn: model_id
+		summarizeBy: none
+
+	column units_sold
+		dataType: int64
+		sourceColumn: units_sold
+		summarizeBy: sum
+
+	column unit_price
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: unit_price
+		summarizeBy: none
+
+	column gross_revenue
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: gross_revenue
+		summarizeBy: sum
+
+	column discount_pct
+		dataType: decimal
+		formatString: 0.00%
+		sourceColumn: discount_pct
+		summarizeBy: none
+
+	column discount_amount
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: discount_amount
+		summarizeBy: sum
+
+	column net_revenue
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: net_revenue
+		summarizeBy: sum
+
+	column unit_cost
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: unit_cost
+		summarizeBy: none
+
+	column total_cost
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: total_cost
+		summarizeBy: sum
+
+	column profit
+		dataType: decimal
+		formatString: € #,##0.00
+		sourceColumn: profit
+		summarizeBy: sum
+
+	column margin_pct
+		dataType: decimal
+		formatString: 0.00%
+		sourceColumn: margin_pct
+		summarizeBy: none
+
+	/// Total net revenue across all sales
+	measure 'Net Revenue' = SUM(fact_sales[net_revenue])
+		formatString: € #,##0
+
+	/// Total units sold
+	measure 'Units Sold' = SUM(fact_sales[units_sold])
+		formatString: #,##0
+
+	/// Total profit
+	measure 'Profit' = SUM(fact_sales[profit])
+		formatString: € #,##0
+
+	/// Profit margin percentage
+	measure 'Margin %' =
+		DIVIDE(
+			[Profit],
+			[Net Revenue],
+			0
+		)
+		formatString: 0.0%
+
+	/// Average selling price per unit
+	measure 'Avg Selling Price' =
+		DIVIDE(
+			[Net Revenue],
+			[Units Sold],
+			0
+		)
+		formatString: € #,##0
+
+	/// Average discount percentage
+	measure 'Avg Discount %' =
+		AVERAGE(fact_sales[discount_pct])
+		formatString: 0.0%
+
+	/// Total gross revenue before discounts
+	measure 'Gross Revenue' = SUM(fact_sales[gross_revenue])
+		formatString: € #,##0
+
+	/// Total cost
+	measure 'Total Cost' = SUM(fact_sales[total_cost])
+		formatString: € #,##0
+
+	/// Cost per unit
+	measure 'Cost per Unit' =
+		DIVIDE(
+			[Total Cost],
+			[Units Sold],
+			0
+		)
+		formatString: € #,##0
+
+	/// Year-over-year revenue growth
+	measure 'Revenue YoY %' =
+		VAR CurrentRevenue = [Net Revenue]
+		VAR PreviousRevenue = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
+		RETURN
+			DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue, BLANK())
+		formatString: 0.0%
+
+	/// Number of transactions
+	measure 'Transaction Count' = COUNTROWS(fact_sales)
+		formatString: #,##0
+
+	partition fact_sales = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/fact_sales.csv"), [Delimiter=",", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"sales_id", type text}, {"date", type date}, {"dealer_id", type text}, {"model_id", type text}, {"units_sold", Int64.Type}, {"unit_price", type number}, {"gross_revenue", type number}, {"discount_pct", type number}, {"discount_amount", type number}, {"net_revenue", type number}, {"unit_cost", type number}, {"total_cost", type number}, {"profit", type number}, {"margin_pct", type number}})
+			in
+				ChangedTypes

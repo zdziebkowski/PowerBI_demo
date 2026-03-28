@@ -1,0 +1,3 @@
+/// Data source path parameter
+expression data_path =
+	"G:/Data/projekty/PowerBI_demo" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]

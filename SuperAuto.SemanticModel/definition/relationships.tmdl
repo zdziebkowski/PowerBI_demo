@@ -1,0 +1,11 @@
+relationship fact_to_date
+	fromColumn: fact_sales.date
+	toColumn: dim_date.date
+
+relationship fact_to_dealer
+	fromColumn: fact_sales.dealer_id
+	toColumn: dim_dealer.dealer_id
+
+relationship fact_to_model
+	fromColumn: fact_sales.model_id
+	toColumn: dim_model.model_id

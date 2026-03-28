@@ -1,0 +1,101 @@
+dealer_id,dealer_name,country,region,city,dealer_tier
+D001,Berlin Car Center,Germany,Europe,Berlin,Premium
+D002,Munich Car Center,Germany,Europe,Munich,Standard
+D003,Hamburg Motors,Germany,Europe,Hamburg,Premium
+D004,Frankfurt Auto Group,Germany,Europe,Frankfurt,Standard
+D005,Germany Auto Dealers,Germany,Europe,Cologne,Premium
+D006,Stuttgart Automotive,Germany,Europe,Stuttgart,Premium
+D007,Dusseldorf Auto Group,Germany,Europe,Dusseldorf,Standard
+D008,Germany Auto Dealers,Germany,Europe,Leipzig,Standard
+D009,France Auto Dealers,France,Europe,Paris,Premium
+D010,Lyon Car Center,France,Europe,Lyon,Local
+D011,Marseille Automotive,France,Europe,Marseille,Standard
+D012,France Auto Dealers,France,Europe,Toulouse,Standard
+D013,Nice Auto Group,France,Europe,Nice,Local
+D014,Bordeaux Motors,France,Europe,Bordeaux,Standard
+D015,UK Premium Cars,UK,Europe,London,Standard
+D016,Manchester Motors,UK,Europe,Manchester,Local
+D017,UK Premium Cars,UK,Europe,Birmingham,Premium
+D018,Leeds Automotive,UK,Europe,Leeds,Premium
+D019,UK Premium Cars,UK,Europe,Glasgow,Standard
+D020,Bristol Auto Group,UK,Europe,Bristol,Local
+D021,Spain Auto Dealers,Spain,Europe,Madrid,Premium
+D022,Barcelona Automotive,Spain,Europe,Barcelona,Premium
+D023,Spain Premium Cars,Spain,Europe,Valencia,Local
+D024,Spain Auto Dealers,Spain,Europe,Seville,Local
+D025,Spain Premium Cars,Spain,Europe,Bilbao,Standard
+D026,Rome Car Center,Italy,Europe,Rome,Premium
+D027,Milan Car Center,Italy,Europe,Milan,Standard
+D028,Italy Premium Cars,Italy,Europe,Naples,Local
+D029,Turin Motors,Italy,Europe,Turin,Local
+D030,Florence Automotive,Italy,Europe,Florence,Standard
+D031,Warsaw Car Center,Poland,Europe,Warsaw,Local
+D032,Krakow Motors,Poland,Europe,Krakow,Standard
+D033,Wroclaw Motors,Poland,Europe,Wroclaw,Standard
+D034,Amsterdam Car Center,Netherlands,Europe,Amsterdam,Local
+D035,Rotterdam Car Center,Netherlands,Europe,Rotterdam,Premium
+D036,New York Car Center,USA,North America,New York,Premium
+D037,Los Angeles Car Center,USA,North America,Los Angeles,Standard
+D038,Chicago Automotive,USA,North America,Chicago,Standard
+D039,Houston Car Center,USA,North America,Houston,Standard
+D040,Phoenix Motors,USA,North America,Phoenix,Standard
+D041,Philadelphia Auto Group,USA,North America,Philadelphia,Standard
+D042,San Antonio Auto Group,USA,North America,San Antonio,Local
+D043,San Diego Automotive,USA,North America,San Diego,Standard
+D044,Dallas Motors,USA,North America,Dallas,Local
+D045,USA Auto Dealers,USA,North America,San Jose,Local
+D046,USA Premium Cars,USA,North America,Austin,Standard
+D047,Jacksonville Automotive,USA,North America,Jacksonville,Standard
+D048,Denver Car Center,USA,North America,Denver,Standard
+D049,USA Premium Cars,USA,North America,Seattle,Premium
+D050,Nashville Car Center,USA,North America,Nashville,Standard
+D051,USA Premium Cars,USA,North America,Portland,Local
+D052,Las Vegas Automotive,USA,North America,Las Vegas,Local
+D053,Boston Automotive,USA,North America,Boston,Standard
+D054,Toronto Motors,Canada,North America,Toronto,Standard
+D055,Vancouver Auto Group,Canada,North America,Vancouver,Local
+D056,Montreal Auto Group,Canada,North America,Montreal,Premium
+D057,Calgary Motors,Canada,North America,Calgary,Local
+D058,Ottawa Automotive,Canada,North America,Ottawa,Standard
+D059,Mexico City Automotive,Mexico,North America,Mexico City,Standard
+D060,Guadalajara Automotive,Mexico,North America,Guadalajara,Standard
+D061,Brazil Auto Dealers,Brazil,South America,Sao Paulo,Local
+D062,Rio de Janeiro Auto Group,Brazil,South America,Rio de Janeiro,Standard
+D063,Brasilia Auto Group,Brazil,South America,Brasilia,Standard
+D064,Brazil Auto Dealers,Brazil,South America,Salvador,Local
+D065,Curitiba Car Center,Brazil,South America,Curitiba,Standard
+D066,Brazil Premium Cars,Brazil,South America,Fortaleza,Standard
+D067,Buenos Aires Automotive,Argentina,South America,Buenos Aires,Premium
+D068,Cordoba Car Center,Argentina,South America,Cordoba,Local
+D069,Argentina Premium Cars,Argentina,South America,Rosario,Local
+D070,Bogota Motors,Colombia,South America,Bogota,Standard
+D071,Medellin Auto Group,Colombia,South America,Medellin,Local
+D072,Chile Premium Cars,Chile,South America,Santiago,Local
+D073,China Auto Dealers,China,Asia-Pacific,Shanghai,Standard
+D074,Beijing Motors,China,Asia-Pacific,Beijing,Standard
+D075,Guangzhou Motors,China,Asia-Pacific,Guangzhou,Standard
+D076,China Auto Dealers,China,Asia-Pacific,Shenzhen,Local
+D077,China Auto Dealers,China,Asia-Pacific,Chengdu,Standard
+D078,Hangzhou Auto Group,China,Asia-Pacific,Hangzhou,Premium
+D079,Japan Premium Cars,Japan,Asia-Pacific,Tokyo,Local
+D080,Japan Premium Cars,Japan,Asia-Pacific,Osaka,Standard
+D081,Yokohama Motors,Japan,Asia-Pacific,Yokohama,Local
+D082,Nagoya Auto Group,Japan,Asia-Pacific,Nagoya,Premium
+D083,Mumbai Automotive,India,Asia-Pacific,Mumbai,Local
+D084,India Auto Dealers,India,Asia-Pacific,Delhi,Local
+D085,Bangalore Motors,India,Asia-Pacific,Bangalore,Standard
+D086,India Auto Dealers,India,Asia-Pacific,Hyderabad,Premium
+D087,Australia Auto Dealers,Australia,Asia-Pacific,Sydney,Local
+D088,Melbourne Automotive,Australia,Asia-Pacific,Melbourne,Local
+D089,Australia Auto Dealers,Australia,Asia-Pacific,Brisbane,Local
+D090,Seoul Car Center,South Korea,Asia-Pacific,Seoul,Standard
+D091,UAE Premium Cars,UAE,MEA,Dubai,Standard
+D092,Abu Dhabi Car Center,UAE,MEA,Abu Dhabi,Standard
+D093,Sharjah Automotive,UAE,MEA,Sharjah,Local
+D094,Riyadh Automotive,Saudi Arabia,MEA,Riyadh,Premium
+D095,Jeddah Motors,Saudi Arabia,MEA,Jeddah,Premium
+D096,Johannesburg Auto Group,South Africa,MEA,Johannesburg,Standard
+D097,Cape Town Motors,South Africa,MEA,Cape Town,Standard
+D098,Durban Auto Group,South Africa,MEA,Durban,Premium
+D099,Lagos Car Center,Nigeria,MEA,Lagos,Premium
+D100,Cairo Auto Group,Egypt,MEA,Cairo,Local

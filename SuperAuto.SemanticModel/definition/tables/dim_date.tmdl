@@ -1,0 +1,55 @@
+/// Date dimension table for time-based analysis
+table dim_date
+
+	column date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-MM-dd
+		sourceColumn: date
+		summarizeBy: none
+
+	column year
+		dataType: int64
+		sourceColumn: year
+		summarizeBy: none
+
+	column quarter
+		dataType: string
+		sourceColumn: quarter
+		summarizeBy: none
+
+	column month
+		dataType: int64
+		sourceColumn: month
+		summarizeBy: none
+
+	column month_name
+		dataType: string
+		sourceColumn: month_name
+		sortByColumn: month
+		summarizeBy: none
+
+	column year_month
+		dataType: string
+		sourceColumn: year_month
+		summarizeBy: none
+
+	column day_of_week
+		dataType: string
+		sourceColumn: day_of_week
+		summarizeBy: none
+
+	column is_weekend
+		dataType: boolean
+		sourceColumn: is_weekend
+		summarizeBy: none
+
+	partition dim_date = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_date.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"date", type date}, {"year", Int64.Type}, {"quarter", type text}, {"month", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"day_of_week", type text}, {"is_weekend", type logical}})
+			in
+				ChangedTypes

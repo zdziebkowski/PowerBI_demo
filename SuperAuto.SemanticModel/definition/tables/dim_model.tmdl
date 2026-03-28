@@ -1,0 +1,38 @@
+/// Vehicle model dimension table
+table dim_model
+
+	column model_id
+		dataType: string
+		isKey
+		sourceColumn: model_id
+		summarizeBy: none
+
+	column model_name
+		dataType: string
+		sourceColumn: model_name
+		summarizeBy: none
+
+	column segment
+		dataType: string
+		sourceColumn: segment
+		summarizeBy: none
+
+	column fuel_type
+		dataType: string
+		sourceColumn: fuel_type
+		summarizeBy: none
+
+	column vehicle_class
+		dataType: string
+		sourceColumn: vehicle_class
+		summarizeBy: none
+
+	partition dim_model = m
+		mode: import
+		source =
+			let
+				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_model.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"model_id", type text}, {"model_name", type text}, {"segment", type text}, {"fuel_type", type text}, {"vehicle_class", type text}})
+			in
+				ChangedTypes
