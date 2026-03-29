@@ -1,44 +1,52 @@
 /// Dealer dimension table with geographic and tier information
 table dim_dealer
+	lineageTag: 91f7c3bb-9097-46c8-80bb-69b38a47a40d
 
 	column dealer_id
 		dataType: string
 		isKey
-		sourceColumn: dealer_id
+		lineageTag: 1062cefb-f4d7-49e4-ae5b-f47435f5449e
 		summarizeBy: none
+		sourceColumn: dealer_id
 
 	column dealer_name
 		dataType: string
-		sourceColumn: dealer_name
+		lineageTag: a6e9fb3b-8302-4567-8972-2bc7e71d7e07
 		summarizeBy: none
+		sourceColumn: dealer_name
 
 	column country
 		dataType: string
+		lineageTag: fb248492-54a7-4a7e-8ca1-293b21ff9a06
 		dataCategory: Country
-		sourceColumn: country
 		summarizeBy: none
+		sourceColumn: country
 
 	column region
 		dataType: string
-		sourceColumn: region
+		lineageTag: 19c8e949-4c3e-41cb-b8e0-6fa3505c44a7
 		summarizeBy: none
+		sourceColumn: region
 
 	column city
 		dataType: string
-		sourceColumn: city
+		lineageTag: 17a94fcf-ca5b-462f-8927-914d190d24a5
 		summarizeBy: none
+		sourceColumn: city
 
 	column dealer_tier
 		dataType: string
-		sourceColumn: dealer_tier
+		lineageTag: 41e9be02-03e1-4304-a2f2-935b11be2883
 		summarizeBy: none
+		sourceColumn: dealer_tier
 
 	partition dim_dealer = m
-		mode: import
+		dataView: full
 		source =
-			let
-				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_dealer.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
-				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"dealer_id", type text}, {"dealer_name", type text}, {"country", type text}, {"region", type text}, {"city", type text}, {"dealer_tier", type text}})
-			in
-				ChangedTypes
+				let
+				    Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_dealer.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"dealer_id", type text}, {"dealer_name", type text}, {"country", type text}, {"region", type text}, {"city", type text}, {"dealer_tier", type text}})
+				in
+				    ChangedTypes
+

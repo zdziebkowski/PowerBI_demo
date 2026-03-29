@@ -1,0 +1,67 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "ba49efad-7fd4-4038-be7d-4904601a9bab",
+  "position": {
+    "x": 480,
+    "y": 306.59846547314578,
+    "z": 6000,
+    "height": 413.40153452685428,
+    "width": 480,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_dealer"
+                    }
+                  },
+                  "Property": "region"
+                }
+              },
+              "queryRef": "dim_dealer.region",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Total Profit"
+                }
+              },
+              "queryRef": "fact_sales.Total Profit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Simulated Profit"
+                }
+              },
+              "queryRef": "fact_sales.Simulated Profit"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

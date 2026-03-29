@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "65ad031e-9539-48d5-9ab0-ea441a3c07c7",
+  "position": {
+    "x": 765.28301886792451,
+    "y": 93.913043478260875,
+    "z": 9000,
+    "height": 92.992327365728912,
+    "width": 190.188679245283,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Avg Selling Price"
+                }
+              },
+              "queryRef": "fact_sales.Avg Selling Price"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

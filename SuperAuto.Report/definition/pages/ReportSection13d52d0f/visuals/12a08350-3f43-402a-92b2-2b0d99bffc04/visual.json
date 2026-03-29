@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "12a08350-3f43-402a-92b2-2b0d99bffc04",
+  "position": {
+    "x": 0,
+    "y": 94.833759590792852,
+    "z": 2000,
+    "height": 81.943734015345271,
+    "width": 480,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Discount Change"
+                    }
+                  },
+                  "Property": "Discount Change"
+                }
+              },
+              "queryRef": "Discount Change.Discount Change",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "215c9c40d5790f14f48d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Discount Change"
+              }
+            },
+            "Property": "Discount Change"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

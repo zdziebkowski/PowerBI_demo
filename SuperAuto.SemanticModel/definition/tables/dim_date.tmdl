@@ -1,55 +1,67 @@
 /// Date dimension table for time-based analysis
 table dim_date
+	lineageTag: d2d00c18-6ba3-48d7-af26-ce814302eb13
 
 	column date
 		dataType: dateTime
 		isKey
 		formatString: yyyy-MM-dd
-		sourceColumn: date
+		lineageTag: ad11473f-cb83-4b10-8f47-6027cf8e670a
 		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column year
 		dataType: int64
-		sourceColumn: year
+		lineageTag: 4cccd2a9-404b-4f6d-83aa-f3b455bce1b8
 		summarizeBy: none
+		sourceColumn: year
 
 	column quarter
 		dataType: string
-		sourceColumn: quarter
+		lineageTag: 86f42dd4-196a-479a-b95c-2f982f33b6e9
 		summarizeBy: none
+		sourceColumn: quarter
 
 	column month
 		dataType: int64
-		sourceColumn: month
+		lineageTag: c427510b-e065-44a9-8188-b570ac507e04
 		summarizeBy: none
+		sourceColumn: month
 
 	column month_name
 		dataType: string
+		lineageTag: 682bae61-231b-4a26-8574-6cc83c2b0e9d
+		summarizeBy: none
 		sourceColumn: month_name
 		sortByColumn: month
-		summarizeBy: none
 
 	column year_month
 		dataType: string
-		sourceColumn: year_month
+		lineageTag: a30c4c67-7fff-46d4-a930-864b3fdb4b20
 		summarizeBy: none
+		sourceColumn: year_month
 
 	column day_of_week
 		dataType: string
-		sourceColumn: day_of_week
+		lineageTag: fd594238-f945-4f0e-8871-3fc62760c58d
 		summarizeBy: none
+		sourceColumn: day_of_week
 
 	column is_weekend
 		dataType: boolean
-		sourceColumn: is_weekend
+		lineageTag: 8586045b-5249-4917-a841-9c8a449579a2
 		summarizeBy: none
+		sourceColumn: is_weekend
 
 	partition dim_date = m
-		mode: import
+		dataView: full
 		source =
-			let
-				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_date.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
-				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"date", type date}, {"year", Int64.Type}, {"quarter", type text}, {"month", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"day_of_week", type text}, {"is_weekend", type logical}})
-			in
-				ChangedTypes
+				let
+				    Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_date.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"date", type date}, {"year", Int64.Type}, {"quarter", type text}, {"month", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"day_of_week", type text}, {"is_weekend", type logical}})
+				in
+				    ChangedTypes
+

@@ -1,283 +1,298 @@
 /// Sales fact table — wholesale transactions from SuperAuto to dealers
 table fact_sales
-
-	column sales_id
-		dataType: string
-		isKey
-		sourceColumn: sales_id
-		summarizeBy: none
-
-	column date
-		dataType: dateTime
-		formatString: yyyy-MM-dd
-		sourceColumn: date
-		summarizeBy: none
-
-	column dealer_id
-		dataType: string
-		sourceColumn: dealer_id
-		summarizeBy: none
-
-	column model_id
-		dataType: string
-		sourceColumn: model_id
-		summarizeBy: none
-
-	column units_sold
-		dataType: int64
-		sourceColumn: units_sold
-		summarizeBy: sum
-
-	column unit_price
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: unit_price
-		summarizeBy: none
-
-	column gross_revenue
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: gross_revenue
-		summarizeBy: sum
-
-	column discount_pct
-		dataType: decimal
-		formatString: 0.00%
-		sourceColumn: discount_pct
-		summarizeBy: none
-
-	column discount_amount
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: discount_amount
-		summarizeBy: sum
-
-	column net_revenue
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: net_revenue
-		summarizeBy: sum
-
-	column unit_cost
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: unit_cost
-		summarizeBy: none
-
-	column total_cost
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: total_cost
-		summarizeBy: sum
-
-	column profit
-		dataType: decimal
-		formatString: € #,##0.00
-		sourceColumn: profit
-		summarizeBy: sum
-
-	column margin_pct
-		dataType: decimal
-		formatString: 0.00%
-		sourceColumn: margin_pct
-		summarizeBy: none
+	lineageTag: 35a5931c-4b47-48a0-8a15-fea7fa266edc
 
 	/// Total net revenue across all sales
 	measure 'Net Revenue' = SUM(fact_sales[net_revenue])
 		formatString: € #,##0
+		lineageTag: 9b0a89df-b043-4d70-9a27-870faf78ac59
 
 	/// Total units sold
 	measure 'Units Sold' = SUM(fact_sales[units_sold])
 		formatString: #,##0
+		lineageTag: e7a581d5-b4cf-4dc4-9810-d3339fded874
 
 	/// Total profit
-	measure 'Profit' = SUM(fact_sales[profit])
+	measure 'Total Profit' = SUM(fact_sales[profit])
 		formatString: € #,##0
+		lineageTag: 80907509-ea2e-46c4-a32e-d84e6d5e980d
 
 	/// Profit margin percentage
-	measure 'Margin %' =
-		DIVIDE(
-			[Profit],
-			[Net Revenue],
-			0
-		)
+	measure 'Margin %' = DIVIDE([Total Profit], [Net Revenue], 0)
 		formatString: 0.0%
+		lineageTag: 6a3ddc31-c005-446f-960b-b32047ae5b9b
 
 	/// Average selling price per unit
-	measure 'Avg Selling Price' =
-		DIVIDE(
-			[Net Revenue],
-			[Units Sold],
-			0
-		)
+	measure 'Avg Selling Price' = DIVIDE([Net Revenue], [Units Sold], 0)
 		formatString: € #,##0
+		lineageTag: 6f4fc191-5606-4300-b11f-a120d722c5ca
 
 	/// Average discount percentage
-	measure 'Avg Discount %' =
-		AVERAGE(fact_sales[discount_pct])
+	measure 'Avg Discount %' = AVERAGE(fact_sales[discount_pct])
 		formatString: 0.0%
+		lineageTag: ed8d0a54-f510-42fb-8397-726052b6d2ac
 
 	/// Total gross revenue before discounts
 	measure 'Gross Revenue' = SUM(fact_sales[gross_revenue])
 		formatString: € #,##0
+		lineageTag: 23c22220-34b5-4a3f-8afd-31ca5a8cd260
 
 	/// Total cost
 	measure 'Total Cost' = SUM(fact_sales[total_cost])
 		formatString: € #,##0
+		lineageTag: db46e9d7-73eb-4d5c-9c30-2ae7181833e4
 
 	/// Cost per unit
-	measure 'Cost per Unit' =
-		DIVIDE(
-			[Total Cost],
-			[Units Sold],
-			0
-		)
+	measure 'Cost per Unit' = DIVIDE([Total Cost], [Units Sold], 0)
 		formatString: € #,##0
+		lineageTag: 5e5b7b33-5e47-4e39-9278-25d99e842284
 
 	/// Year-over-year revenue growth
 	measure 'Revenue YoY %' =
-		VAR CurrentRevenue = [Net Revenue]
-		VAR PreviousRevenue = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
-		RETURN
-			DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue, BLANK())
+			VAR CurrentRevenue = [Net Revenue]
+			VAR PreviousRevenue = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
+			RETURN
+			    DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue, BLANK())
 		formatString: 0.0%
+		lineageTag: f5584b94-f1e0-4c14-bc2c-2602f1f9f3e4
 
 	/// Number of transactions
 	measure 'Transaction Count' = COUNTROWS(fact_sales)
 		formatString: #,##0
-
-	/// --- FIELD PARAMETER: Metric Selector ---
+		lineageTag: e5d84cf0-d843-4b8d-8836-57bd4d4d92c2
 
 	/// Metric switched by Field Parameter slicer
 	measure 'Selected Metric' =
-		SWITCH(
-			SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0),
-			0, [Net Revenue],
-			1, [Total Profit],
-			2, [Margin %],
-			3, [Units Sold]
-		)
+			SWITCH(
+			    SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0),
+			    0, [Net Revenue],
+			    1, [Total Profit],
+			    2, [Margin %],
+			    3, [Units Sold]
+			)
 		formatString: #,##0
+		lineageTag: 4a5ec1a3-9149-49a7-b44b-c7a12bb7f999
 
 	/// Formatted value of selected metric
 	measure 'Selected Metric Formatted' =
-		VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0)
-		RETURN
-			SWITCH(
-				_sel,
-				0, FORMAT([Net Revenue], "€ #,##0"),
-				1, FORMAT([Total Profit], "€ #,##0"),
-				2, FORMAT([Margin %], "0.0%"),
-				3, FORMAT([Units Sold], "#,##0")
-			)
-
-	/// --- WHAT-IF: Discount Impact ---
+			VAR _sel = SELECTEDVALUE('Metric Parameter'[Metric Parameter Order], 0)
+			RETURN
+			    SWITCH(
+			        _sel,
+			        0, FORMAT([Net Revenue], "€ #,##0"),
+			        1, FORMAT([Total Profit], "€ #,##0"),
+			        2, FORMAT([Margin %], "0.0%"),
+			        3, FORMAT([Units Sold], "#,##0")
+			    )
+		lineageTag: 82ef8bdd-3a12-4ff0-8747-d7b3e7d2d29e
 
 	/// Adjusted discount after what-if parameter
 	measure 'Adjusted Discount %' = [Avg Discount %] + [Discount Change Value]
 		formatString: 0.0%
+		lineageTag: 21698f53-99b0-4af1-bf65-891096ab294e
 
 	/// Profit after discount change simulation
 	measure 'Simulated Profit' =
-		VAR DiscountShift = [Discount Change Value]
-		VAR OriginalGross = [Gross Revenue]
-		VAR NewDiscount = [Avg Discount %] + DiscountShift
-		VAR NewNetRevenue = OriginalGross * (1 - NewDiscount)
-		VAR Cost = [Total Cost]
-		RETURN
-			NewNetRevenue - Cost
+			VAR DiscountShift = [Discount Change Value]
+			VAR OriginalGross = [Gross Revenue]
+			VAR NewDiscount = [Avg Discount %] + DiscountShift
+			VAR NewNetRevenue = OriginalGross * (1 - NewDiscount)
+			VAR Cost = [Total Cost]
+			RETURN
+			    NewNetRevenue - Cost
 		formatString: € #,##0
+		lineageTag: 9a2a6042-648a-4999-b2a4-ceb89bd26580
 
 	/// Difference between simulated and actual profit
 	measure 'Profit Impact' = [Simulated Profit] - [Total Profit]
 		formatString: € #,##0
-
-	/// --- DYNAMIC TITLES ---
+		lineageTag: 6dca2fc0-f887-48a5-b428-8d02d6a8886d
 
 	/// Dynamic page title for Executive Overview
 	measure 'Dynamic Title Overview' =
-		VAR _region = IF(
-			ISFILTERED(dim_dealer[region]),
-			SELECTEDVALUE(dim_dealer[region], "Multiple Regions"),
-			"All Regions"
-		)
-		VAR _year = IF(
-			ISFILTERED(dim_date[year]),
-			FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
-			"2024-2025"
-		)
-		RETURN
-			"Sales Performance — " & _region & ", " & _year
+			VAR _region = IF(
+			    ISFILTERED(dim_dealer[region]),
+			    SELECTEDVALUE(dim_dealer[region], "Multiple Regions"),
+			    "All Regions"
+			)
+			VAR _year = IF(
+			    ISFILTERED(dim_date[year]),
+			    FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
+			    "2024-2025"
+			)
+			RETURN
+			    "Sales Performance — " & _region & ", " & _year
+		lineageTag: 1f1946f4-2bcf-4008-9353-8822dfd39d2b
 
 	/// Dynamic page title for Product & Dealer Analysis
 	measure 'Dynamic Title Product' =
-		VAR _model = IF(
-			ISFILTERED(dim_model[model_name]),
-			SELECTEDVALUE(dim_model[model_name], "Multiple Models"),
-			"All Models"
-		)
-		VAR _year = IF(
-			ISFILTERED(dim_date[year]),
-			FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
-			"2024-2025"
-		)
-		RETURN
-			"Product & Dealer Analysis — " & _model & ", " & _year
-
-	/// --- RANKING ---
+			VAR _model = IF(
+			    ISFILTERED(dim_model[model_name]),
+			    SELECTEDVALUE(dim_model[model_name], "Multiple Models"),
+			    "All Models"
+			)
+			VAR _year = IF(
+			    ISFILTERED(dim_date[year]),
+			    FORMAT(SELECTEDVALUE(dim_date[year]), "0"),
+			    "2024-2025"
+			)
+			RETURN
+			    "Product & Dealer Analysis — " & _model & ", " & _year
+		lineageTag: 736107e9-cb1d-4295-be13-4338f20763b0
 
 	/// Dealer ranking by revenue
 	measure 'Dealer Revenue Rank' =
-		IF(
-			HASONEVALUE(dim_dealer[dealer_name]),
-			RANKX(
-				ALL(dim_dealer[dealer_name]),
-				[Net Revenue],
-				,
-				DESC,
-				Dense
+			IF(
+			    HASONEVALUE(dim_dealer[dealer_name]),
+			    RANKX(
+			        ALL(dim_dealer[dealer_name]),
+			        [Net Revenue],
+			        ,
+			        DESC,
+			        Dense
+			    )
 			)
-		)
 		formatString: #,##0
+		lineageTag: ed785e72-f7fe-4eca-a633-909d76eb5ba4
 
 	/// Dealer ranking by margin
 	measure 'Dealer Margin Rank' =
-		IF(
-			HASONEVALUE(dim_dealer[dealer_name]),
-			RANKX(
-				ALL(dim_dealer[dealer_name]),
-				[Margin %],
-				,
-				DESC,
-				Dense
+			IF(
+			    HASONEVALUE(dim_dealer[dealer_name]),
+			    RANKX(
+			        ALL(dim_dealer[dealer_name]),
+			        [Margin %],
+			        ,
+			        DESC,
+			        Dense
+			    )
 			)
-		)
 		formatString: #,##0
-
-	/// --- YoY HELPERS ---
+		lineageTag: 4fa30f4c-92ab-43fc-9b55-15d1448a8b82
 
 	/// Revenue in previous year
 	measure 'PY Revenue' = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: € #,##0
+		lineageTag: 89f1760a-028a-4171-a99b-fa8d5341b679
 
 	/// Profit in previous year
 	measure 'PY Profit' = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(dim_date[date]))
 		formatString: € #,##0
+		lineageTag: 5fd23a19-aec9-40fc-9e5f-2bda011f66a7
 
 	/// Year-over-year profit growth
 	measure 'Profit YoY %' =
-		VAR Current = [Total Profit]
-		VAR Previous = [PY Profit]
-		RETURN
-			DIVIDE(Current - Previous, Previous, BLANK())
+			VAR _Current = [Total Profit]
+			VAR _Previous = [PY Profit]
+			RETURN
+			    DIVIDE(_Current - _Previous, _Previous, BLANK())
 		formatString: 0.0%
+		lineageTag: 463632c9-32b0-4a36-966e-3b8678d4a071
+
+	column sales_id
+		dataType: string
+		isKey
+		lineageTag: f159bc71-a077-4dbb-9741-7d7e8f001ba4
+		summarizeBy: none
+		sourceColumn: sales_id
+
+	column date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: c60a60e6-d559-4e24-986f-91e8eb5c9dab
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column dealer_id
+		dataType: string
+		lineageTag: 0b470ba3-6e19-460e-b35f-e2485a0dded5
+		summarizeBy: none
+		sourceColumn: dealer_id
+
+	column model_id
+		dataType: string
+		lineageTag: ada69e27-ee46-424f-b61c-5c1d0ff4bf6f
+		summarizeBy: none
+		sourceColumn: model_id
+
+	column units_sold
+		dataType: int64
+		lineageTag: 75ae96ab-53da-4ec2-882c-e317ab178ea0
+		summarizeBy: sum
+		sourceColumn: units_sold
+
+	column unit_price
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: 063293a3-1593-4103-8983-a466474d344c
+		summarizeBy: none
+		sourceColumn: unit_price
+
+	column gross_revenue
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: 8604f957-15ca-4255-bee0-a4d96fb92900
+		summarizeBy: sum
+		sourceColumn: gross_revenue
+
+	column discount_pct
+		dataType: double
+		formatString: 0.00%
+		lineageTag: abe44f4b-a8fb-4d04-afac-f690fde98f5a
+		summarizeBy: none
+		sourceColumn: discount_pct
+
+	column discount_amount
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: c8ded920-1c5d-4034-92cf-1fcbd5fefcec
+		summarizeBy: sum
+		sourceColumn: discount_amount
+
+	column net_revenue
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: ac412546-27bf-438d-a4a1-2f9435d9a283
+		summarizeBy: sum
+		sourceColumn: net_revenue
+
+	column unit_cost
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: 6cd16d82-85e1-46f6-b4ee-c74ccaf93ddf
+		summarizeBy: none
+		sourceColumn: unit_cost
+
+	column total_cost
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: 43162772-d735-4ea2-987d-6f04f0df8097
+		summarizeBy: sum
+		sourceColumn: total_cost
+
+	column profit
+		dataType: double
+		formatString: € #,##0.00
+		lineageTag: 0938b398-b4b8-4425-be48-32e9a29425ac
+		summarizeBy: sum
+		sourceColumn: profit
+
+	column margin_pct
+		dataType: double
+		formatString: 0.00%
+		lineageTag: fc2e858a-bc83-4334-b233-482029758e47
+		summarizeBy: none
+		sourceColumn: margin_pct
 
 	partition fact_sales = m
-		mode: import
+		dataView: full
 		source =
-			let
-				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/fact_sales.csv"), [Delimiter=",", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
-				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"sales_id", type text}, {"date", type date}, {"dealer_id", type text}, {"model_id", type text}, {"units_sold", Int64.Type}, {"unit_price", type number}, {"gross_revenue", type number}, {"discount_pct", type number}, {"discount_amount", type number}, {"net_revenue", type number}, {"unit_cost", type number}, {"total_cost", type number}, {"profit", type number}, {"margin_pct", type number}})
-			in
-				ChangedTypes
+				let
+				    Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/fact_sales.csv"), [Delimiter=",", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"sales_id", type text}, {"date", type date}, {"dealer_id", type text}, {"model_id", type text}, {"units_sold", Int64.Type}, {"unit_price", type number}, {"gross_revenue", type number}, {"discount_pct", type number}, {"discount_amount", type number}, {"net_revenue", type number}, {"unit_cost", type number}, {"total_cost", type number}, {"profit", type number}, {"margin_pct", type number}})
+				in
+				    ChangedTypes
+

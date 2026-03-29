@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "0860b856-5e14-461c-8de1-9b835d660d3a",
+  "position": {
+    "x": 215.41778975741238,
+    "y": 182.30179028132994,
+    "z": 4000,
+    "height": 90.230179028133,
+    "width": 189.54177897574124,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Simulated Profit"
+                }
+              },
+              "queryRef": "fact_sales.Simulated Profit"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

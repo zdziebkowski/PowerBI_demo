@@ -1,0 +1,83 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "f614ea39-88fa-4f26-98f4-463a3a1d0d71",
+  "position": {
+    "x": 327.33153638814014,
+    "y": 0,
+    "z": 3000,
+    "height": 93.913043478260875,
+    "width": 185.01347708894878,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metric Parameter"
+                    }
+                  },
+                  "Property": "Metric Parameter"
+                }
+              },
+              "queryRef": "Metric Parameter.Metric Parameter",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "orientation": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b395b0c712a4f6063732",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Metric Parameter"
+              }
+            },
+            "Property": "Metric Parameter"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

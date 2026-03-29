@@ -1,29 +1,28 @@
 /// Field Parameter for switching between key metrics
 table 'Metric Parameter'
+	lineageTag: 978fca9d-3354-4654-8918-6ccb5d81b3a7
 
 	column 'Metric Parameter'
-		dataType: string
-		isDefaultLabel
-		sourceColumn: Metric Parameter
-		sortByColumn: 'Metric Parameter Order'
-		summarizeBy: none
+		lineageTag: f149eca7-b308-46b0-b1c5-beec1f473baa
+		isNameInferred
+		sourceColumn: [Metric Parameter]
 
 	column 'Metric Parameter Order'
-		dataType: int64
-		isHidden
-		sourceColumn: Metric Parameter Order
-		summarizeBy: none
+		lineageTag: 658edaca-4d97-46e3-899e-085ceb5a2f0c
+		isNameInferred
+		sourceColumn: [Metric Parameter Order]
 
 	partition 'Metric Parameter' = calculated
-		mode: import
+		dataView: full
 		source =
-			DATATABLE(
-			    "Metric Parameter", STRING,
-			    "Metric Parameter Order", INTEGER,
-			    {
-			        {"Net Revenue", 0},
-			        {"Profit", 1},
-			        {"Margin %", 2},
-			        {"Units Sold", 3}
-			    }
-			)
+				DATATABLE(
+				    "Metric Parameter", STRING,
+				    "Metric Parameter Order", INTEGER,
+				    {
+				        {"Net Revenue", 0},
+				        {"Profit", 1},
+				        {"Margin %", 2},
+				        {"Units Sold", 3}
+				    }
+				)
+

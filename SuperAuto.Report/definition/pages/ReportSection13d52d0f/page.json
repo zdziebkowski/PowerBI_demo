@@ -1,0 +1,6 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "ReportSection13d52d0f",
+  "displayName": "Interactive Demo",
+  "displayOption": "DeprecatedDynamic"
+}

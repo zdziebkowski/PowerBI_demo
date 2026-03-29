@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "df0c3753-2c97-4faf-8d8d-fdf5d63ee444",
+  "position": {
+    "x": 512.345013477089,
+    "y": 0,
+    "z": 4000,
+    "height": 93.913043478260875,
+    "width": 447.65498652291103,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Dynamic Title Overview"
+                }
+              },
+              "queryRef": "fact_sales.Dynamic Title Overview"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

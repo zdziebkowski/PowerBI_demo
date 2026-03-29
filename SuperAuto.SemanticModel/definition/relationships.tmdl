@@ -9,3 +9,4 @@ relationship fact_to_dealer
 relationship fact_to_model
 	fromColumn: fact_sales.model_id
 	toColumn: dim_model.model_id
+

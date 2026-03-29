@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "a88dd7c3-6eed-4aed-af97-d27096a8acef",
+  "position": {
+    "x": 384.90566037735846,
+    "y": 93.913043478260875,
+    "z": 7000,
+    "height": 92.992327365728912,
+    "width": 190.188679245283,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Margin %"
+                }
+              },
+              "queryRef": "fact_sales.Margin %"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

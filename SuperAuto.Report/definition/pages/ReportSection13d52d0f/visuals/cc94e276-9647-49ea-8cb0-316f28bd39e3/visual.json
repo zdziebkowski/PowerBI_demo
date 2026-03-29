@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "cc94e276-9647-49ea-8cb0-316f28bd39e3",
+  "position": {
+    "x": 0,
+    "y": 176.77749360613811,
+    "z": 3000,
+    "height": 90.230179028133,
+    "width": 190.188679245283,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Total Profit"
+                }
+              },
+              "queryRef": "fact_sales.Total Profit"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

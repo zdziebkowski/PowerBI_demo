@@ -1,38 +1,45 @@
 /// Vehicle model dimension table
 table dim_model
+	lineageTag: 907b9107-2963-495d-b441-b71380af1daa
 
 	column model_id
 		dataType: string
 		isKey
-		sourceColumn: model_id
+		lineageTag: 69417e78-76b0-4872-8ce4-0423ffe3dc79
 		summarizeBy: none
+		sourceColumn: model_id
 
 	column model_name
 		dataType: string
-		sourceColumn: model_name
+		lineageTag: 531d2cff-1bce-4af0-8a8f-7934d1952d20
 		summarizeBy: none
+		sourceColumn: model_name
 
 	column segment
 		dataType: string
-		sourceColumn: segment
+		lineageTag: bbc44d82-61f0-409f-b26c-706c0ce6f167
 		summarizeBy: none
+		sourceColumn: segment
 
 	column fuel_type
 		dataType: string
-		sourceColumn: fuel_type
+		lineageTag: 2edba786-526c-4caf-addb-27a54665acce
 		summarizeBy: none
+		sourceColumn: fuel_type
 
 	column vehicle_class
 		dataType: string
-		sourceColumn: vehicle_class
+		lineageTag: fed74cf7-0b61-4109-9500-a71e3a04fb8d
 		summarizeBy: none
+		sourceColumn: vehicle_class
 
 	partition dim_model = m
-		mode: import
+		dataView: full
 		source =
-			let
-				Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_model.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
-				PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				ChangedTypes = Table.TransformColumnTypes(PromotedHeaders,{{"model_id", type text}, {"model_name", type text}, {"segment", type text}, {"fuel_type", type text}, {"vehicle_class", type text}})
-			in
-				ChangedTypes
+				let
+				    Source = Csv.Document(File.Contents("G:/Data/projekty/PowerBI_demo/data/dim_model.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"model_id", type text}, {"model_name", type text}, {"segment", type text}, {"fuel_type", type text}, {"vehicle_class", type text}})
+				in
+				    ChangedTypes
+

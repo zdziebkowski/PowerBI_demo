@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "73b2139d-6514-4f7f-bf31-7787c14165ed",
+  "position": {
+    "x": 1010,
+    "y": 62,
+    "z": 10000,
+    "height": 93,
+    "width": 260,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_sales"
+                    }
+                  },
+                  "Property": "Avg Discount %"
+                }
+              },
+              "queryRef": "fact_sales.Avg Discount %"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

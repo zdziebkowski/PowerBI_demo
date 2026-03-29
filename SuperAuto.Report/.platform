@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "SuperAuto"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2ac04509-a401-40e7-bdf9-1f5f13934ea0"
+  }
+}

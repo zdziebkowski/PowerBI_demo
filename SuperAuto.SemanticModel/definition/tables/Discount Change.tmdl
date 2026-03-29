@@ -1,17 +1,17 @@
-/// What-If parameter: simulate discount change (-10pp to +10pp)
+/// What-If parameter for discount change simulation (-10% to +10%)
 table 'Discount Change'
+	lineageTag: cad579b1-2537-4299-869f-a00ad129bbcf
 
-	column 'Discount Change'
-		dataType: double
-		isDefaultLabel
-		formatString: 0.0%
-		sourceColumn: Value
-		summarizeBy: none
-
-	/// Selected discount change value from what-if slicer
+	/// Selected discount change from what-if slicer
 	measure 'Discount Change Value' = SELECTEDVALUE('Discount Change'[Discount Change], 0)
 		formatString: 0.0%
+		lineageTag: 89e876d0-65c9-4f91-b931-cb08764af659
+
+	column 'Discount Change'
+		lineageTag: 0a3e7e7f-1e3f-4285-9409-2b51d9f72414
+		sourceColumn: [Value]
 
 	partition 'Discount Change' = calculated
-		mode: import
+		dataView: full
 		source = GENERATESERIES(-0.10, 0.10, 0.01)
+
